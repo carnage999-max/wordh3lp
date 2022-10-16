@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/c1c26ed80d.js" crossorigin="anonymous"></script>
+    <title>Wordhelp</title>
+</head>
+<body style="background-color: #fff;">
+  {% include 'navbar.html' %}
+    <div class="container">
+        <div class="jumbotron">
+          <h1><u> Word subset</u></h1>
+          <p>
+            This tool can be used in <a href="">scrabble</a> 
+          </p>      
+          <h3> Enter a text with <abbr title="You've got no other choice😄 Just make it 10 letters or less">10</abbr> or less characters.</h3>
+          <h3>Enter only alphabets of the english language, uppercase or lower case.</h3>
+          <h3>Do not add phrases with punctuation marks, spaces or symbols.</h3>
+          <div class="text-muted">
+            <h4>If you're using this tool as a scrabble assistant, to get optimum results, ensure that your word contains at most 7 characters. (Just an advice tho🙂)</h4>
+            <h4>Click on any of the resulting words to view words that can be formed from them</h4>
+          </div>
+          <form action="{%url 'home' %}" method="POST" >
+            {% csrf_token %}
+        <div class="input-group">
+            <input type="text" class="form-control" maxlength="10" name="word" placeholder="Enter up to 10 letters">
+            <div class="input-group-btn"><button type="submit" class="btn btn btn-info"><i class="glyphicon glyphicon-search"></i></button></div>
+        </div>
+        {% if final is None %}
+          <blockquote><h4><i>Your answers are one click away</i></h4></blockquote>
+        {% else %}
+        <p>
+        </p>
+        <details>
+          <summary style="cursor: pointer;">
+            <h3 class="text-primary"> <span class="bg-primary">{{words}}</span>
+              has {{len_word}} characters, 
+              and you would score at least <span class="bg-primary">{{scrabble_word_count}} points</span> when you play all characters in scrabble
+            </h3>
+            <h4 class="text-muted"><b>{{ count }} words</b> can formed from <b>{{ words }}. Tap to view🎬</b></h4>
+          </summary>
+            {% for word in final %}
+              <button class="btn btn btn-primary" value="{{word}}" type="submit" name="word" onclick="input.value = this.value;">{{ word }}</button>
+            {% endfor %}
+        </details>
+            </form>
+            <form class="navbar-form navbar" action="{%url 'dictionarysearch' %}" method="post">
+                {% csrf_token %}
+            <div class="input-group">
+                <input type="text" name="word_search" class="form-control" placeholder="Search the dictionary" aria-placeholder="Search">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </div>
+            </div>
+        {% endif %}
+        
+            </form>
+        </div>    
+      </div>
+      {% include 'footer.html' %}
+
+<script>
+    var input = document.getElementById(search);
+</script>
+</body>
+</html>
